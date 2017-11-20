@@ -1,12 +1,6 @@
-/**
- * Created by stryker on 2014.03.05..
- */
-require(['state/Load','state/Start','state/Play','state/End','lib/phaser-no-physics.min'],function(Load,Start,Play,End){
+require(['state/Load','state/Start','state/Play','state/End','lib/phaser.min'], (Load,Start,Play,End) => {
+    const _game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.AUTO, 'game');
 
-    var _game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.AUTO, 'game');
-
-
-    //Load state
     Load.init(_game,'Start'); //args: game object, next state
     _game.state.add('Load',Load.getLoadState()); //args: state name, geting the load state
 
@@ -24,5 +18,4 @@ require(['state/Load','state/Start','state/Play','state/End','lib/phaser-no-phys
 
     //Starting the Load state
     _game.state.start('Load');
-
 });

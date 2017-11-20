@@ -45,4 +45,4 @@ define(['module/Player','module/Aliens','module/Bullets','module/Explosions','mo
         }
 
     }
-})
+});
