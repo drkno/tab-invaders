@@ -20,7 +20,7 @@ require(['state/Load','state/Start','state/Play','state/End','lib/phaser-no-phys
 
     //End State
     End.init(_game,'Play');
-    _game.state.add('End',End.getEndState());
+    _game.state.add('End', End.getEndState());
 
     //Starting the Load state
     _game.state.start('Load');

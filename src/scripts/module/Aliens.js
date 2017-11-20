@@ -73,55 +73,46 @@ define(['module/HUD'],function(HUD){
                 });
             }
             else {
-                console.log('chrome was undefined')
+                console.log('chrome was undefined');
                 _createAllienGroupImpl([]);
             }
         }
 
         var _fireBullet = function(){
             _bullet = _bulletGroup.getFirstExists(false);
-
             _livingAlien = [];
 
             _alienGroup.forEachAlive(function(alien){
                 _livingAlien.push(alien);
             });
 
-            if(_bullet && _livingAlien.length > 0){
-
-                //_bullet.lifespan = _game.height / (_bulletSpeed/1000);
+            if (_bullet && _livingAlien.length > 0) {
                 _bullet.checkWorldBounds = true;
-
-                _randomAlienIndex = _game.rnd.integerInRange(0,_livingAlien.length);
-
+                _randomAlienIndex = _game.rnd.integerInRange(0, _livingAlien.length);
                 _shooter = _livingAlien[_randomAlienIndex];
 
-                if(_shooter){
-                    _bullet.reset(_shooter.body.x,_shooter.body.y);
-
-                    _game.physics.arcade.moveToObject(_bullet,_playerShip,_bulletSpeed);
+                if (_shooter) {
+                    _bullet.reset(_shooter.body.x, _shooter.body.y);
+                    _game.physics.arcade.moveToObject(_bullet, _playerShip, _bulletSpeed);
                 }
-            //all alien died
-            }else if(_livingAlien.length == 0){
+            }
+            else if (_livingAlien.length == 0){
                 _game.state.start('End');
             }
-
         };
 
         var _collisionHandler = function(bullet, alien){
-
             alien.damage(bullet.bulletDamage);
             bullet.kill();
 
-            if(alien.health == 0){
+            if (alien.health == 0){
                 _explosion = _explosionGroup.getFirstExists(false);
-                _explosion.reset(alien.body.x,alien.body.y);
-                _explosion.play('kaboom',30,false,true);
+                _explosion.reset(alien.body.x, alien.body.y);
+                _explosion.play('kaboom', 30, false, true);
             }
         };
 
-        //Public functions
-        return{
+        return {
             setBulletGroup: function(bullets){
                 _bulletGroup = bullets.getBulletGroup();
             },

@@ -5,6 +5,7 @@ define(['module/HUD'],function(HUD){
     var _End = {
         create: function(){
             HUD.createTitle('Game Over');
+            HUD.createSubTitle('You murdered ' + 5 + ' tabs.');
         }
     }
 

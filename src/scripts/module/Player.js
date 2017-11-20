@@ -1,7 +1,3 @@
-/**
- * Created by stryker on 2014.03.05..
- * Player module
- */
 define(['module/HUD'],function(HUD){
 
     //Private Variables
