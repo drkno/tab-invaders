@@ -33,40 +33,25 @@ define(['module/HUD'],function(HUD){
     };
 
     var _collisionHandler = function(ship,bullet){
-
         ship.damage(bullet.bulletDamage);
-
         bullet.kill();
-        HUD.updateHealthText(ship.health);
-        
+
         //ship lose a life
-        if(ship.health == 0){            
+        if (ship.health <= 0) {
             this.stopShooting();
             _explosion = _explosionGroup.getFirstExists(false);
-            _explosion.reset(_ship.body.x,_ship.body.y);
-            _explosion.play('kaboom',30,false,true);
-            
-            _lives--;
-            HUD.updateLivesText(_lives);
-            
-            //lose life
-            if(_lives > 0){                
-                ship.revive(_health);
-                this.startShooting();
-            //dead
-            }else{
-                _game.state.start('End');
-            }
+            _explosion.reset(_ship.body.x, _ship.body.y);
+            _explosion.play('kaboom', 30, false, true);
+            setTimeout(() => _game.state.start('End'), 1000);
         }
-
     };
 
     return{
         init: function(game){
-            _game = game;            
+            _game = game;
         },
         preload: function(){
-            _game.load.image('ship', 'assets/img/player.png');
+            _game.load.image('ship', 'img/player.png');
         },
         create: function(configuration){
             _ship = _game.add.sprite(400,500,'ship');
@@ -99,7 +84,7 @@ define(['module/HUD'],function(HUD){
         },
         setExplosionGroup: function(explosions){
             _explosionGroup = explosions.getExplosionGroup();
-        },        
+        },
         startShooting: function(){
             _shootingEvent = _game.time.events.loop(_firingTime,_fireBullet,this);
         },

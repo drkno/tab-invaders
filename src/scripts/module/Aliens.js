@@ -29,16 +29,20 @@ define(['module/HUD'],function(HUD){
             _livingAlien = [],
             _randomAlienIndex = null,
             _shooter = null,
-            _shootingEvent = null;            
+            _shootingEvent = null;
 
         _alienGroup.enableBody = true;
         _alienGroup.physicsBodyType = Phaser.Physics.ARCADE;
         _createAllienGroup();
 
-        function _createAllienGroup(){
-            //making aliens
-            for(var i=0;i < _cols;i++){
-                for(var j=0; j < _rows;j++){
+        const _createAllienGroupImpl = tabs => {
+            const tabCount = tabs.length,
+                aliensPerWidth = ((window.innerWidth / 48) / 2) | 0;
+
+            let j = 0;
+            let k = 0;
+            while (k < tabCount) {
+                for (let i = 0; i < aliensPerWidth, k < tabCount; i++, k++) {
                     _alien = _alienGroup.create(i * 48, j * 50, 'invader');
 
                     //custome properties
@@ -50,38 +54,48 @@ define(['module/HUD'],function(HUD){
                     _alien.play('fly');
                     _alien.body.moves = false;
                 }
+                j++;
             }
-                       
 
-            //setting aliens postition
             _alienGroup.x = 100;
             _alienGroup.y = 50;
 
             //  All this does is basically start the invaders moving.
-            _tween = _game.add.tween(_alienGroup).to( { x: 200 }, 2000, _easing, true, 0, 1000, true);
-           
+            _tween = _game.add.tween(_alienGroup).to( { x: window.innerWidth - 48 * Math.min(tabCount, aliensPerWidth)}, 2 * window.innerWidth, _easing, true, 0, 1000, true);
+        };
+
+        function _createAllienGroup(){
+            if (chrome) {
+                chrome.tabs.query({
+                     pinned: false
+                }, tabs => {
+                    _createAllienGroupImpl(tabs);
+                });
+            }
+            else {
+                console.log('chrome was undefined')
+                _createAllienGroupImpl([]);
+            }
         }
-
-
 
         var _fireBullet = function(){
             _bullet = _bulletGroup.getFirstExists(false);
-            
+
             _livingAlien = [];
-            
+
             _alienGroup.forEachAlive(function(alien){
                 _livingAlien.push(alien);
             });
-                        
+
             if(_bullet && _livingAlien.length > 0){
 
                 //_bullet.lifespan = _game.height / (_bulletSpeed/1000);
                 _bullet.checkWorldBounds = true;
-                
+
                 _randomAlienIndex = _game.rnd.integerInRange(0,_livingAlien.length);
 
                 _shooter = _livingAlien[_randomAlienIndex];
-                
+
                 if(_shooter){
                     _bullet.reset(_shooter.body.x,_shooter.body.y);
 
@@ -98,14 +112,12 @@ define(['module/HUD'],function(HUD){
 
             alien.damage(bullet.bulletDamage);
             bullet.kill();
-            
+
             if(alien.health == 0){
                 _explosion = _explosionGroup.getFirstExists(false);
                 _explosion.reset(alien.body.x,alien.body.y);
                 _explosion.play('kaboom',30,false,true);
             }
-
-            HUD.updateScoreText(alien.myScore);
         };
 
         //Public functions
@@ -142,11 +154,11 @@ define(['module/HUD'],function(HUD){
             _game = game;
         },
         preload: function(){
-            _game.load.spritesheet('invader', 'assets/img/invader32x32x4.png', 32, 32);
+            _game.load.spritesheet('invader', 'img/tab32x32x4.png', 32, 32);
         },
         create: function(configuration){
             return( new _Aliens(configuration) );
-        },                
+        },
         setPlayerShip: function(playerShip){
             _playerShip = playerShip;
         }
