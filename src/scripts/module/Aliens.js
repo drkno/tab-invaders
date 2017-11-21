@@ -13,7 +13,6 @@ define(['module/HUD'], HUD => {
             this._bulletGroup = null;
             this._bullet = null;
             this._explosionGroup = null;
-            this._explosion = null;
             this._livingAlien = [];
             this._randomAlienIndex = null;
             this._shooter = null;
@@ -92,14 +91,11 @@ define(['module/HUD'], HUD => {
         }
 
         _collisionHandler (bullet, alien) {
-            alien.damage(bullet.bulletDamage);
+            alien.kill();
             bullet.kill();
-
-            if (alien.health == 0){
-                this._explosion = this._explosionGroup.getFirstExists(false);
-                this._explosion.reset(alien.body.x, alien.body.y);
-                this._explosion.play('kaboom', 30, false, true);
-            }
+            const explosion = this._explosionGroup.getFirstExists(false);
+            explosion.reset(alien.body.x, alien.body.y);
+            explosion.play('kaboom', 30, false, true);
         }
 
         setBulletGroup (bullets) {

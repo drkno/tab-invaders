@@ -11,7 +11,6 @@ define(['module/HUD'], HUD => {
             this._bulletGroup = null;
             this._bullet = null;
             this._explosionGroup = null;
-            this._explosion = null;
             this._alienGroup = null;
             this._aliens = null;
             this._shootingEvent = null;
@@ -45,17 +44,13 @@ define(['module/HUD'], HUD => {
         }
 
         _collisionHandler (ship, bullet) {
-            ship.damage(bullet.bulletDamage);
+            ship.kill();
             bullet.kill();
-
-            //ship lose a life
-            if (ship.health <= 0) {
-                this.stopShooting();
-                this._explosion = this._explosionGroup.getFirstExists(false);
-                this._explosion.reset(this._ship.body.x, this._ship.body.y);
-                this._explosion.play('kaboom', 30, false, true);
-                setTimeout(() => this._game.state.start('End'), 1000);
-            }
+            this.stopShooting();
+            const explosion = this._explosionGroup.getFirstExists(false);
+            explosion.reset(this._ship.body.x, this._ship.body.y);
+            explosion.play('kaboom', 30, false, true);
+            setTimeout(() => this._game.state.start('End'), 1000);
         }
 
         update () {
