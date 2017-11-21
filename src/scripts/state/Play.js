@@ -1,8 +1,9 @@
-define(['module/Player','module/Aliens','module/Bullets','module/Explosions','module/HUD'], (Player, Aliens, Bullets, Explosions, HUD) => {
+define(['module/Aliens', 'module/Bullets', 'module/Explosions'], (Aliens, Bullets, Explosions) => {
     class Play {
-        constructor (game, nextState) {
+        constructor (game, nextState, player) {
             this._game = game;
             this._nextState = nextState;
+            this._player = player;
             this._aliens = null;
         }
 
@@ -15,9 +16,9 @@ define(['module/Player','module/Aliens','module/Bullets','module/Explosions','mo
                 bulletSpeed: 500
             };
 
-            Player.create(playerConfiguration);
-            Player.setBulletGroup(Bullets.create(10,'bullet',100));
-            Player.setExplosionGroup(Explosions.create(1,'kaboom'));
+            this._player.create(playerConfiguration);
+            this._player.setBulletGroup(new Bullets(10, 'bullet', 100, this._game));
+            this._player.setExplosionGroup(new Explosions(1, 'kaboom', this._game));
 
             const alienConfiguration = {
                 rows:4,
@@ -29,23 +30,22 @@ define(['module/Player','module/Aliens','module/Bullets','module/Explosions','mo
                 easing: Phaser.Easing.Linear.None
             };
 
-            const aliens = new Aliens(this._game);
-            this._aliens = aliens.create(alienConfiguration);
-            this._aliens.setBulletGroup(Bullets.create(30,'enemyBullet',10));
-            this._aliens.setExplosionGroup(Explosions.create(5,'kaboom'));
-            aliens.setPlayerShip(Player.getPlayerShip());
+            this._aliens = new Aliens(alienConfiguration, this._game);
+            this._aliens.setBulletGroup(new Bullets(30, 'enemyBullet', 10, this._game));
+            this._aliens.setExplosionGroup(new Explosions(5, 'kaboom', this._game));
+            this._aliens.setPlayerShip(this._player.getPlayerShip());
 
-            Player.setAliensAndAlienGroup(this._aliens);
+            this._player.setAliensAndAlienGroup(this._aliens);
 
             //They start shoting, shooting is triggered by a time loop
-            Player.startShooting();
+            this._player.startShooting();
             this._aliens.startShooting();
         }
 
         update () {
-            Player.update();
-            this._aliens.createOverLap(Player.getBulletGroup());
-            Player.createOverLap(this._aliens.getBulletGroup());
+            this._player.update();
+            this._aliens.createOverLap(this._player.getBulletGroup());
+            this._player.createOverLap(this._aliens.getBulletGroup());
         }
     }
     return Play;

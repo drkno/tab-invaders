@@ -1,14 +1,14 @@
-define(['module/HUD'], HUD => {
-    class End {
-        constructor (game, nextState) {
-            this._game = game;
-            this._nextState = nextState;
-        }
-
-        create () {
-            HUD.createTitle('Game Over');
-            HUD.createSubTitle('You murdered ' + 5 + ' tabs.');
-        }
+class End {
+    constructor (game, nextState, hud) {
+        this._game = game;
+        this._nextState = nextState;
+        this._hud = hud;
     }
-    return End;
-})
+
+    create () {
+        this._hud.createTitle('Game Over');
+        this._hud.createSubTitle('You murdered ' + 5 + ' tabs.');
+    }
+}
+
+define([], () => End);

@@ -1,108 +1,106 @@
 define(['module/HUD'], HUD => {
-
-    //Private Variables
-    var _game = null,
-        _health = null,
-        _lives = null,
-        _score = null,
-        _firingTime = null,
-        _ship = null,
-        _cursors = null,
-        _bulletGroup = null,
-        _bullet = null,
-        _explosionGroup = null,
-        _explosion = null,
-        _alienGroup = null,
-        _aliens = null,
-        _shootingEvent = null,
-        _bulletSpeed = null;
-
-    var _fireBullet = function(){
-        _bullet = _bulletGroup.getFirstExists(false);
-
-        if(_bullet){
-            //_bullet.lifespan = _game.height / (_bulletSpeed/1000);
-            _bullet.checkWorldBounds = true;
-            _bullet.reset(_ship.x,_ship.y+8);
-            _bullet.body.velocity.y = -_bulletSpeed;
-        }
-    };
-
-    var _collisionHandler = function(ship,bullet){
-        ship.damage(bullet.bulletDamage);
-        bullet.kill();
-
-        //ship lose a life
-        if (ship.health <= 0) {
-            this.stopShooting();
-            _explosion = _explosionGroup.getFirstExists(false);
-            _explosion.reset(_ship.body.x, _ship.body.y);
-            _explosion.play('kaboom', 30, false, true);
-            setTimeout(() => _game.state.start('End'), 1000);
-        }
-    };
-
     class Player {
         constructor (game) {
             this._game = game;
+            this._health = null;
+            this._lives = null;
+            this._score = null;
+            this._firingTime = null;
+            this._ship = null;
+            this._cursors = null;
+            this._bulletGroup = null;
+            this._bullet = null;
+            this._explosionGroup = null;
+            this._explosion = null;
+            this._alienGroup = null;
+            this._aliens = null;
+            this._shootingEvent = null;
+            this._bulletSpeed = null;
         }
 
-        create: function(configuration){
-            _ship = _game.add.sprite(400,500,'ship');
-            _ship.anchor.setTo(0.5,0.5);
-            _game.physics.enable(_ship,Phaser.Physics.ARCADE);
-            _ship.body.collideWorldBounds = true;
-            _ship.health = configuration.health;
-            _health = configuration.health;
-            _lives = configuration.lives;
-            _score = configuration.score;
-            _firingTime = configuration.firingTime;
-            _bulletSpeed = configuration.bulletSpeed;
+        create (configuration) {
+            this._ship = this._game.add.sprite(400, 500, 'ship');
+            this._ship.anchor.setTo(0.5, 0.5);
+            this._game.physics.enable(this._ship, Phaser.Physics.ARCADE);
+            this._ship.body.collideWorldBounds = true;
+            this._ship.health = configuration.health;
+            this._health = configuration.health;
+            this._lives = configuration.lives;
+            this._score = configuration.score;
+            this._firingTime = configuration.firingTime;
+            this._bulletSpeed = configuration.bulletSpeed;
 
-            _cursors = _game.input.keyboard.createCursorKeys();
+            this._cursors = this._game.input.keyboard.createCursorKeys();
         }
 
-        update: function(){
-            _ship.body.velocity.setTo(0,0);
+        _fireBullet () {
+            this._bullet = this._bulletGroup.getFirstExists(false);
 
-            if(_cursors.left.isDown){
-                _ship.body.velocity.x = -200;
-            }else if(_cursors.right.isDown){
-                _ship.body.velocity.x = 200;
+            if (this._bullet){
+                //_bullet.lifespan = _game.height / (_bulletSpeed/1000);
+                this._bullet.checkWorldBounds = true;
+                this._bullet.reset(this._ship.x, this._ship.y + 8);
+                this._bullet.body.velocity.y = -this._bulletSpeed;
             }
         }
 
-        setBulletGroup: function(bullets){
-            _bulletGroup = bullets.getBulletGroup();
+        _collisionHandler (ship, bullet) {
+            ship.damage(bullet.bulletDamage);
+            bullet.kill();
+
+            //ship lose a life
+            if (ship.health <= 0) {
+                this.stopShooting();
+                this._explosion = this._explosionGroup.getFirstExists(false);
+                this._explosion.reset(this._ship.body.x, this._ship.body.y);
+                this._explosion.play('kaboom', 30, false, true);
+                setTimeout(() => this._game.state.start('End'), 1000);
+            }
         }
 
-        getBulletGroup: function(){
-            return _bulletGroup;
+        update () {
+            this._ship.body.velocity.setTo(0, 0);
+
+            if (this._cursors.left.isDown) {
+                this._ship.body.velocity.x = -200;
+            }
+            else if (this._cursors.right.isDown) {
+                this._ship.body.velocity.x = 200;
+            }
         }
 
-        setExplosionGroup: function(explosions){
-            _explosionGroup = explosions.getExplosionGroup();
+        setBulletGroup (bullets) {
+            this._bulletGroup = bullets.getBulletGroup();
         }
 
-        startShooting: function(){
-            _shootingEvent = _game.time.events.loop(_firingTime,_fireBullet,this);
+        getBulletGroup () {
+            return this._bulletGroup;
         }
 
-        stopShooting: function(){
-            _game.time.events.remove(_shootingEvent);
+        setExplosionGroup (explosions) {
+            this._explosionGroup = explosions.getExplosionGroup();
         }
 
-        getPlayerShip: function(){
-            return _ship;
+        startShooting () {
+            this._shootingEvent = this._game.time.events.loop(this._firingTime, this._fireBullet, this);
         }
 
-        createOverLap: function(bulletGroup){
-            _game.physics.arcade.overlap(_ship,bulletGroup,_collisionHandler,null,this);
+        stopShooting () {
+            this._game.time.events.remove(this._shootingEvent);
         }
 
-        setAliensAndAlienGroup: function(aliens){
-            _aliens = aliens;
-            _alienGroup=aliens.getAlienGroup();
+        getPlayerShip () {
+            return this._ship;
+        }
+
+        createOverLap (bulletGroup) {
+            this._game.physics.arcade.overlap(this._ship, bulletGroup, this._collisionHandler, null, this);
+        }
+
+        setAliensAndAlienGroup (aliens) {
+            this._aliens = aliens;
+            this._alienGroup = aliens.getAlienGroup();
         }
     }
+    return Player;
 });

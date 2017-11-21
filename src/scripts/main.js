@@ -1,16 +1,27 @@
-require(['state/Load','state/Start','state/Play','state/End','lib/phaser.min'], (Load,Start,Play,End) => {
-    const _game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.AUTO, 'game');
+require(['state/Load', 'state/Start', 'state/Play', 'state/End', 'module/HUD', 'module/Player', 'lib/phaser.min'], (Load, Start, Play, End, HUD, Player) => {
+    const game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.AUTO, 'game');
 
-    _game.load.spritesheet('invader', 'img/tab32x32x4.png', 32, 32);
-    _game.load.spritesheet('kaboom', 'img/explode.png', 128, 128);
-    _game.load.image('ship', 'img/player.png');
-    _game.load.image('bullet', 'img/bullet.png');
-    _game.load.image('enemyBullet', 'img/enemy-bullet.png');
+    setTimeout(() => {
+        game.load.spritesheet('invader', 'img/tab32x32x4.png', 32, 32);
+        game.load.spritesheet('kaboom', 'img/explode.png', 128, 128);
+        game.load.image('ship', 'img/player.png');
+        game.load.image('bullet', 'img/bullet.png');
+        game.load.image('enemyBullet', 'img/enemy-bullet.png');
+        game.load.start();
 
-    _game.state.add('Load', new Load(_game, 'Start'));
-    _game.state.add('Start', new Start(_game, 'Play'));
-    _game.state.add('Play', new Play(_game, 'End'));
-    _game.state.add('End', new End(_game, 'Play'));
+        const hud = new HUD(game);
+        const player = new Player(game);
 
-    _game.state.start('Load');
+        const load = new Load(game, 'Start');
+        const start = new Start(game, 'Play', hud);
+        const play = new Play(game, 'End', player);
+        const end = new End(game, 'Play', hud);
+
+        game.state.add('Load', load);
+        game.state.add('Start', start);
+        game.state.add('Play', play);
+        game.state.add('End', end);
+
+        game.state.start('Load');
+    }, 100);
 });

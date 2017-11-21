@@ -55,16 +55,16 @@ define(['module/HUD'], HUD => {
         }
 
         _createAlienGroup () {
-            if (chrome) {
+            if (!!window.chrome) {
                 chrome.tabs.query({
                      pinned: false
                 }, tabs => {
-                    _createAlienGroupImpl(tabs);
+                    this._createAlienGroupImpl(tabs);
                 });
             }
             else {
                 console.log('chrome was undefined');
-                _createAlienGroupImpl([]);
+                this._createAlienGroupImpl([1,2,3,4,5,6,7,8]);
             }
         }
 
@@ -115,7 +115,7 @@ define(['module/HUD'], HUD => {
         }
 
         startShooting () {
-            this._shootingEvent = this._game.time.events.loop(this._firingTime,_fireBullet,this);
+            this._shootingEvent = this._game.time.events.loop(this._firingTime, this._fireBullet, this);
         }
 
         stopShooting () {
@@ -123,7 +123,7 @@ define(['module/HUD'], HUD => {
         }
 
         createOverLap (bulletGroup) {
-            this._game.physics.arcade.overlap(bulletGroup, this._alienGroup, _collisionHandler, null, this);
+            this._game.physics.arcade.overlap(bulletGroup, this._alienGroup, this._collisionHandler, null, this);
         }
 
         getAlienGroup () {
