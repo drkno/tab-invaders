@@ -1,4 +1,4 @@
-define(['module/HUD'],function(HUD){
+define(['module/HUD'], HUD => {
 
     //Private Variables
     var _game = null,
@@ -42,13 +42,11 @@ define(['module/HUD'],function(HUD){
         }
     };
 
-    return{
-        init: function(game){
-            _game = game;
-        },
-        preload: function(){
-            _game.load.image('ship', 'img/player.png');
-        },
+    class Player {
+        constructor (game) {
+            this._game = game;
+        }
+
         create: function(configuration){
             _ship = _game.add.sprite(400,500,'ship');
             _ship.anchor.setTo(0.5,0.5);
@@ -62,7 +60,8 @@ define(['module/HUD'],function(HUD){
             _bulletSpeed = configuration.bulletSpeed;
 
             _cursors = _game.input.keyboard.createCursorKeys();
-        },
+        }
+
         update: function(){
             _ship.body.velocity.setTo(0,0);
 
@@ -71,28 +70,36 @@ define(['module/HUD'],function(HUD){
             }else if(_cursors.right.isDown){
                 _ship.body.velocity.x = 200;
             }
-        },
+        }
+
         setBulletGroup: function(bullets){
             _bulletGroup = bullets.getBulletGroup();
-        },
+        }
+
         getBulletGroup: function(){
             return _bulletGroup;
-        },
+        }
+
         setExplosionGroup: function(explosions){
             _explosionGroup = explosions.getExplosionGroup();
-        },
+        }
+
         startShooting: function(){
             _shootingEvent = _game.time.events.loop(_firingTime,_fireBullet,this);
-        },
+        }
+
         stopShooting: function(){
             _game.time.events.remove(_shootingEvent);
-        },
+        }
+
         getPlayerShip: function(){
             return _ship;
-        },
+        }
+
         createOverLap: function(bulletGroup){
             _game.physics.arcade.overlap(_ship,bulletGroup,_collisionHandler,null,this);
-        },
+        }
+
         setAliensAndAlienGroup: function(aliens){
             _aliens = aliens;
             _alienGroup=aliens.getAlienGroup();

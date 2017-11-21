@@ -1,5 +1,5 @@
 define(['module/HUD'], HUD => {
-    class _Aliens {
+    class Aliens {
         constructor (configuration, game) {
             this._game = game;
             this._alienGroup = this._game.add.group();
@@ -18,6 +18,7 @@ define(['module/HUD'], HUD => {
             this._randomAlienIndex = null;
             this._shooter = null;
             this._shootingEvent = null;
+            this._playerShip = null;
 
             this._alienGroup.enableBody = true;
             this._alienGroup.physicsBodyType = Phaser.Physics.ARCADE;
@@ -82,7 +83,7 @@ define(['module/HUD'], HUD => {
 
                 if (this._shooter) {
                     this._bullet.reset(this._shooter.body.x, this._shooter.body.y);
-                    this._game.physics.arcade.moveToObject(this._bullet, _playerShip, this._bulletSpeed);
+                    this._game.physics.arcade.moveToObject(this._bullet, this._playerShip, this._bulletSpeed);
                 }
             }
             else if (this._livingAlien.length == 0){
@@ -127,21 +128,6 @@ define(['module/HUD'], HUD => {
 
         getAlienGroup () {
             return this._alienGroup;
-        }
-    }
-
-    class Aliens {
-        constructor (game) {
-            this._game = game;
-            this._playerShip = null;
-        }
-
-        preload () {
-            this._game.load.spritesheet('invader', 'img/tab32x32x4.png', 32, 32);
-        }
-
-        create (configuration) {
-            return new _Aliens(configuration, this._game);
         }
 
         setPlayerShip (playerShip) {

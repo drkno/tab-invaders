@@ -11,8 +11,8 @@ define(['module/Player','module/Aliens','module/Bullets','module/Explosions','mo
             Player.preload();
             const aliens = new Aliens(this._game);
             aliens.preload();
-            Bullets.init(this._game);
-            Bullets.preload();
+            const bullets = new Bullets(this._game);
+            bullets.preload();
             Explosions.init(this._game);
             Explosions.preload();
         }
