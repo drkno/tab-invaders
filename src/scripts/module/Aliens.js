@@ -1,41 +1,30 @@
-/**
- * Created by stryker on 2014.03.05..
- */
-define(['module/HUD'],function(HUD){
+define(['module/HUD'], HUD => {
+    class _Aliens {
+        constructor (configuration, game) {
+            this._game = game;
+            this._alienGroup = this._game.add.group();
+            this._scoreValue = configuration.scoreValue;
+            this._firingTime = configuration.firingTime;
+            this._bulletSpeed = configuration.bulletSpeed;
+            this._health = configuration.health;
+            this._easing = configuration.easing;
+            this._alien = null;
+            this._tween = null;
+            this._bulletGroup = null;
+            this._bullet = null;
+            this._explosionGroup = null;
+            this._explosion = null;
+            this._livingAlien = [];
+            this._randomAlienIndex = null;
+            this._shooter = null;
+            this._shootingEvent = null;
 
-    //Private variables
-    var _game = null;
-    //var _alienGroups = [];
-    var _playerShip = null;
+            this._alienGroup.enableBody = true;
+            this._alienGroup.physicsBodyType = Phaser.Physics.ARCADE;
+            this._createAlienGroup();
+        }
 
-    //Private class
-    //This is a wrapper for the aliengroup
-    //Instead of extending Phaser group, i wrap it up in a class
-    var _Aliens = function(configuration){
-        var _alienGroup = _game.add.group(),
-            _cols = configuration.cols,
-            _rows = configuration.rows,
-            _scoreValue = configuration.scoreValue,
-            _firingTime = configuration.firingTime,
-            _bulletSpeed = configuration.bulletSpeed,
-            _health = configuration.health,
-            _easing = configuration.easing,
-            _alien = null,
-            _tween = null,
-            _bulletGroup = null,
-            _bullet = null,
-            _explosionGroup = null,
-            _explosion = null,
-            _livingAlien = [],
-            _randomAlienIndex = null,
-            _shooter = null,
-            _shootingEvent = null;
-
-        _alienGroup.enableBody = true;
-        _alienGroup.physicsBodyType = Phaser.Physics.ARCADE;
-        _createAllienGroup();
-
-        const _createAllienGroupImpl = tabs => {
+        _createAlienGroupImpl (tabs) {
             const tabCount = tabs.length,
                 aliensPerWidth = ((window.innerWidth / 48) / 2) | 0;
 
@@ -43,115 +32,121 @@ define(['module/HUD'],function(HUD){
             let k = 0;
             while (k < tabCount) {
                 for (let i = 0; i < aliensPerWidth, k < tabCount; i++, k++) {
-                    _alien = _alienGroup.create(i * 48, j * 50, 'invader');
+                    this._alien = this._alienGroup.create(i * 48, j * 50, 'invader');
 
                     //custome properties
-                    _alien.health = _health;
-                    _alien.myScore = _scoreValue;
+                    this._alien.health = this._health;
+                    this._alien.myScore = this._scoreValue;
 
-                    _alien.anchor.setTo(0.5, 0.5);
-                    _alien.animations.add('fly', [ 0, 1, 2, 3 ], 20, true);
-                    _alien.play('fly');
-                    _alien.body.moves = false;
+                    this._alien.anchor.setTo(0.5, 0.5);
+                    this._alien.animations.add('fly', [ 0, 1, 2, 3 ], 20, true);
+                    this._alien.play('fly');
+                    this._alien.body.moves = false;
                 }
                 j++;
             }
 
-            _alienGroup.x = 100;
-            _alienGroup.y = 50;
+            this._alienGroup.x = 100;
+            this._alienGroup.y = 50;
 
             //  All this does is basically start the invaders moving.
-            _tween = _game.add.tween(_alienGroup).to( { x: window.innerWidth - 48 * Math.min(tabCount, aliensPerWidth)}, 2 * window.innerWidth, _easing, true, 0, 1000, true);
-        };
+            this._tween = this._game.add.tween(this._alienGroup).to( { x: window.innerWidth - 48 * Math.min(tabCount, aliensPerWidth)}, 2 * window.innerWidth, this._easing, true, 0, 1000, true);
+        }
 
-        function _createAllienGroup(){
+        _createAlienGroup () {
             if (chrome) {
                 chrome.tabs.query({
                      pinned: false
                 }, tabs => {
-                    _createAllienGroupImpl(tabs);
+                    _createAlienGroupImpl(tabs);
                 });
             }
             else {
                 console.log('chrome was undefined');
-                _createAllienGroupImpl([]);
+                _createAlienGroupImpl([]);
             }
         }
 
-        var _fireBullet = function(){
-            _bullet = _bulletGroup.getFirstExists(false);
-            _livingAlien = [];
+        _fireBullet () {
+            this._bullet = this._bulletGroup.getFirstExists(false);
+            this._livingAlien = [];
 
-            _alienGroup.forEachAlive(function(alien){
-                _livingAlien.push(alien);
+            this._alienGroup.forEachAlive(alien => {
+                this._livingAlien.push(alien);
             });
 
-            if (_bullet && _livingAlien.length > 0) {
-                _bullet.checkWorldBounds = true;
-                _randomAlienIndex = _game.rnd.integerInRange(0, _livingAlien.length);
-                _shooter = _livingAlien[_randomAlienIndex];
+            if (this._bullet && this._livingAlien.length > 0) {
+                this._bullet.checkWorldBounds = true;
+                this._randomAlienIndex = this._game.rnd.integerInRange(0, this._livingAlien.length);
+                this._shooter = this._livingAlien[this._randomAlienIndex];
 
-                if (_shooter) {
-                    _bullet.reset(_shooter.body.x, _shooter.body.y);
-                    _game.physics.arcade.moveToObject(_bullet, _playerShip, _bulletSpeed);
+                if (this._shooter) {
+                    this._bullet.reset(this._shooter.body.x, this._shooter.body.y);
+                    this._game.physics.arcade.moveToObject(this._bullet, _playerShip, this._bulletSpeed);
                 }
             }
-            else if (_livingAlien.length == 0){
-                _game.state.start('End');
+            else if (this._livingAlien.length == 0){
+                this._game.state.start('End');
             }
-        };
+        }
 
-        var _collisionHandler = function(bullet, alien){
+        _collisionHandler (bullet, alien) {
             alien.damage(bullet.bulletDamage);
             bullet.kill();
 
             if (alien.health == 0){
-                _explosion = _explosionGroup.getFirstExists(false);
-                _explosion.reset(alien.body.x, alien.body.y);
-                _explosion.play('kaboom', 30, false, true);
+                this._explosion = this._explosionGroup.getFirstExists(false);
+                this._explosion.reset(alien.body.x, alien.body.y);
+                this._explosion.play('kaboom', 30, false, true);
             }
-        };
-
-        return {
-            setBulletGroup: function(bullets){
-                _bulletGroup = bullets.getBulletGroup();
-            },
-            getBulletGroup: function(){
-                return _bulletGroup;
-            },
-            setExplosionGroup: function(explosions){
-                _explosionGroup = explosions.getExplosionGroup();
-            },
-            startShooting: function(){
-                _shootingEvent = _game.time.events.loop(_firingTime,_fireBullet,this);
-            },
-            stopShooting: function(){
-                _game.time.events.remove(_shootingEvent);
-            },
-            createOverLap: function(bulletGroup){
-                _game.physics.arcade.overlap(bulletGroup, _alienGroup, _collisionHandler, null, this);
-            },
-            getAlienGroup: function(){
-                return _alienGroup;
-            }
-
         }
 
-    };//End of _Aliens
+        setBulletGroup (bullets) {
+            this._bulletGroup = bullets.getBulletGroup();
+        }
 
-    //Public functions
-    return{
-        init: function(game){
-            _game = game;
-        },
-        preload: function(){
-            _game.load.spritesheet('invader', 'img/tab32x32x4.png', 32, 32);
-        },
-        create: function(configuration){
-            return( new _Aliens(configuration) );
-        },
-        setPlayerShip: function(playerShip){
-            _playerShip = playerShip;
+        getBulletGroup () {
+            return this._bulletGroup;
+        }
+
+        setExplosionGroup (explosions) {
+            this._explosionGroup = explosions.getExplosionGroup();
+        }
+
+        startShooting () {
+            this._shootingEvent = this._game.time.events.loop(this._firingTime,_fireBullet,this);
+        }
+
+        stopShooting () {
+            this._game.time.events.remove(this._shootingEvent);
+        }
+
+        createOverLap (bulletGroup) {
+            this._game.physics.arcade.overlap(bulletGroup, this._alienGroup, _collisionHandler, null, this);
+        }
+
+        getAlienGroup () {
+            return this._alienGroup;
         }
     }
+
+    class Aliens {
+        constructor (game) {
+            this._game = game;
+            this._playerShip = null;
+        }
+
+        preload () {
+            this._game.load.spritesheet('invader', 'img/tab32x32x4.png', 32, 32);
+        }
+
+        create (configuration) {
+            return new _Aliens(configuration, this._game);
+        }
+
+        setPlayerShip (playerShip) {
+            this._playerShip = playerShip;
+        }
+    }
+    return Aliens;
 });

@@ -1,48 +1,25 @@
-/**
- * Created by stryker on 2014.03.22..
- */
-define(['module/Player','module/Aliens','module/Bullets','module/Explosions','module/HUD'],function(Player,Aliens,Bullets,Explosions,HUD){
+define(['module/Player','module/Aliens','module/Bullets','module/Explosions','module/HUD'], (Player,Aliens,Bullets,Explosions,HUD) => {
+    class Load {
+        constructor(game, nextStage) {
+            this._game = game;
+            this._nextStage = nextStage;
+        }
 
-    var _game = null,
-        _nextStage = null;
-
-    //Loading State
-    var _Load = {
-        preload: function(){
-
-            //Hud
-            HUD.init(_game);
-
-            //Player
-            Player.init(_game);
+        preload () {
+            HUD.init(this._game);
+            Player.init(this._game);
             Player.preload();
-
-            //Aliens
-            Aliens.init(_game);
-            Aliens.preload();
-
-            //Bullets
-            Bullets.init(_game);
+            const aliens = new Aliens(this._game);
+            aliens.preload();
+            Bullets.init(this._game);
             Bullets.preload();
-
-            //Exploisons
-            Explosions.init(_game);
+            Explosions.init(this._game);
             Explosions.preload();
-
-        },
-        create: function(){
-            _game.state.start(_nextStage);
-        }
-    }
-
-    return{
-        init: function(game,nextStage){
-            _game = game;
-            _nextStage = nextStage;
-        },
-        getLoadState: function(){
-            return(_Load);
         }
 
+        create () {
+            this._game.state.start(this._nextStage);
+        }
     }
+    return Load;
 });

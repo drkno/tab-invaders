@@ -1,21 +1,14 @@
-define(['module/HUD'],function(HUD){
-    var _game = null,
-        _nextState = null;
+define(['module/HUD'], HUD => {
+    class End {
+        constructor (game, nextState) {
+            this._game = game;
+            this._nextState = nextState;
+        }
 
-    var _End = {
-        create: function(){
+        create () {
             HUD.createTitle('Game Over');
             HUD.createSubTitle('You murdered ' + 5 + ' tabs.');
         }
     }
-
-    return{
-        init: function(game,nextState){
-            _game = game;
-            _nextState = nextState;
-        },
-        getEndState: function(){
-            return (_End);
-        }
-    }
+    return End;
 })
