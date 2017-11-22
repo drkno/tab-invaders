@@ -1,7 +1,8 @@
-define(['module/HUD'], HUD => {
+define([], () => {
     class Aliens {
-        constructor (configuration, game) {
+        constructor (configuration, game, hud) {
             this._game = game;
+            this._hud = hud;
             this._alienGroup = this._game.add.group();
             this._scoreValue = configuration.scoreValue;
             this._firingTime = configuration.firingTime;
@@ -22,9 +23,6 @@ define(['module/HUD'], HUD => {
             this._alienGroup.enableBody = true;
             this._alienGroup.physicsBodyType = Phaser.Physics.ARCADE;
             this._createAlienGroup();
-        }
-
-        _createAlienGroupImpl (tabs) {
         }
 
         _queryTabs () {
@@ -86,11 +84,14 @@ define(['module/HUD'], HUD => {
 
         _collisionHandler (bullet, alien) {
             this._game.tabsDestroyed++;
+            this._hud.createMinorTitle(`Tabs: ${this._game.tabsDestroyed}`);
             alien.kill();
             bullet.kill();
             const explosion = this._explosionGroup.getFirstExists(false);
-            explosion.reset(alien.body.x, alien.body.y);
-            explosion.play('kaboom', 30, false, true);
+            if (explosion) {
+                explosion.reset(alien.body.x, alien.body.y);
+                explosion.play('kaboom', 30, false, true);
+            }
         }
 
         setBulletGroup (bullets) {

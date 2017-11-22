@@ -1,17 +1,15 @@
 define(['module/Aliens', 'module/Bullets', 'module/Explosions'], (Aliens, Bullets, Explosions) => {
     class Play {
-        constructor (game, nextState, player) {
+        constructor (game, nextState, player, hud) {
             this._game = game;
             this._nextState = nextState;
             this._player = player;
+            this._hud = hud;
             this._aliens = null;
         }
 
         create () {
             const playerConfiguration = {
-                health: 1,
-                lives: 1,
-                score: 0,
                 firingTime: 300,
                 bulletSpeed: 500
             };
@@ -21,16 +19,13 @@ define(['module/Aliens', 'module/Bullets', 'module/Explosions'], (Aliens, Bullet
             this._player.setExplosionGroup(new Explosions(1, 'kaboom', this._game));
 
             const alienConfiguration = {
-                rows:4,
-                cols:10,
                 scoreValue:10,
                 firingTime:200,
                 bulletSpeed:200,
-                health: 100,
                 easing: Phaser.Easing.Linear.None
             };
 
-            this._aliens = new Aliens(alienConfiguration, this._game);
+            this._aliens = new Aliens(alienConfiguration, this._game, this._hud);
             this._aliens.setBulletGroup(new Bullets(30, 'enemyBullet', 10, this._game));
             this._aliens.setExplosionGroup(new Explosions(5, 'kaboom', this._game));
             this._aliens.setPlayerShip(this._player.getPlayerShip());

@@ -1,7 +1,8 @@
-define(['module/HUD'], HUD => {
+define([], () => {
     class Player {
-        constructor (game) {
+        constructor (game, hud) {
             this._game = game;
+            this._hud = hud;
             this._firingTime = null;
             this._ship = null;
             this._cursors = null;
@@ -16,6 +17,7 @@ define(['module/HUD'], HUD => {
         }
 
         create (configuration) {
+            this._hud.createMinorTitle('Tabs: 0');
             this._ship = this._game.add.sprite(window.innerWidth / 2, window.innerHeight, 'ship');
             this._ship.anchor.setTo(0.5, 0.5);
             this._game.physics.enable(this._ship, Phaser.Physics.ARCADE);
@@ -23,7 +25,6 @@ define(['module/HUD'], HUD => {
             this._ship.health = configuration.health;
             this._firingTime = configuration.firingTime;
             this._bulletSpeed = configuration.bulletSpeed;
-
             this._cursors = this._game.input.keyboard.createCursorKeys();
             this._spacebar = this._game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
         }
