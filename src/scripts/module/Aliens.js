@@ -25,13 +25,21 @@ define(['module/HUD'], HUD => {
         }
 
         _createAlienGroupImpl (tabs) {
-            const tabCount = tabs.length,
-                aliensPerWidth = ((window.innerWidth / 48) / 2) | 0;
+        }
+
+        _queryTabs () {
+            return new Promise(resolve => chrome.tabs.query({ pinned: false }, tabs => resolve(tabs)));
+        }
+
+        async _createAlienGroup () {
+            const tabs = await this._queryTabs();
+            const tabCount = tabs.length;
+            const aliensPerWidth = ((window.innerWidth / 48) / 2) | 0;
 
             let j = 0;
             let k = 0;
             while (k < tabCount) {
-                for (let i = 0; i < aliensPerWidth, k < tabCount; i++, k++) {
+                for (let i = 0; i < aliensPerWidth && k < tabCount; i++, k++) {
                     this._alien = this._alienGroup.create(i * 48, j * 50, `tab-${k}`);
 
                     //custome properties
@@ -51,20 +59,6 @@ define(['module/HUD'], HUD => {
 
             //  All this does is basically start the invaders moving.
             this._tween = this._game.add.tween(this._alienGroup).to( { x: window.innerWidth - 48 * Math.min(tabCount, aliensPerWidth)}, 2 * window.innerWidth, this._easing, true, 0, 1000, true);
-        }
-
-        _createAlienGroup () {
-            if (!!window.chrome) {
-                chrome.tabs.query({
-                     pinned: false
-                }, tabs => {
-                    this._createAlienGroupImpl(tabs);
-                });
-            }
-            else {
-                console.log('chrome was undefined');
-                this._createAlienGroupImpl([1,2,3,4,5,6,7,8]);
-            }
         }
 
         _fireBullet () {
@@ -91,6 +85,7 @@ define(['module/HUD'], HUD => {
         }
 
         _collisionHandler (bullet, alien) {
+            this._game.tabsDestroyed++;
             alien.kill();
             bullet.kill();
             const explosion = this._explosionGroup.getFirstExists(false);

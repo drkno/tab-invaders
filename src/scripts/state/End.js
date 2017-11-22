@@ -7,7 +7,7 @@ class End {
 
     create () {
         this._hud.createTitle('Game Over');
-        this._hud.createSubTitle('You murdered ' + 5 + ' tabs.');
+        this._hud.createSubTitle(`You murdered ${this._game.tabsDestroyed} tabs.`);
     }
 }
 
