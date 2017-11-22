@@ -8,7 +8,7 @@ define(['module/ImageLoader'], TabImageLoader => {
 
         async create () {
             this._hud.createTitle('Loading...');
-            this._game.tabsDestroyed = 0;
+            this._game.tabsDestroyed = [];
 
             const ld = new TabImageLoader();
             const tabImages = ld.getImages();

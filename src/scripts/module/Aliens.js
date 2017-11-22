@@ -9,7 +9,6 @@ define([], () => {
             this._bulletSpeed = configuration.bulletSpeed;
             this._health = configuration.health;
             this._easing = configuration.easing;
-            this._alien = null;
             this._tween = null;
             this._bulletGroup = null;
             this._bullet = null;
@@ -38,16 +37,12 @@ define([], () => {
             let k = 0;
             while (k < tabCount) {
                 for (let i = 0; i < aliensPerWidth && k < tabCount; i++, k++) {
-                    this._alien = this._alienGroup.create(i * 48, j * 50, `tab-${k}`);
-
-                    //custome properties
-                    this._alien.health = this._health;
-                    this._alien.myScore = this._scoreValue;
-
-                    this._alien.anchor.setTo(0.5, 0.5);
-                    this._alien.animations.add('fly', [ 0, 1, 2, 3 ], 20, true);
-                    this._alien.play('fly');
-                    this._alien.body.moves = false;
+                    const alien = this._alienGroup.create(i * 48, j * 50, `tab-${k}`);
+                    alien.tabId = tabs[k].id && tabs[k].id !== chrome.tabs.TAB_ID_NONE ? tabs[k].id : null;
+                    alien.anchor.setTo(0.5, 0.5);
+                    alien.animations.add('fly', [ 0, 1, 2, 3 ], 20, true);
+                    alien.play('fly');
+                    alien.body.moves = false;
                 }
                 j++;
             }
@@ -83,8 +78,8 @@ define([], () => {
         }
 
         _collisionHandler (bullet, alien) {
-            this._game.tabsDestroyed++;
-            this._hud.createMinorTitle(`Tabs: ${this._game.tabsDestroyed}`);
+            this._game.tabsDestroyed.push(alien.tabId);
+            this._hud.createMinorTitle(`Tabs: ${this._game.tabsDestroyed.length}`);
             alien.kill();
             bullet.kill();
             const explosion = this._explosionGroup.getFirstExists(false);
