@@ -19,9 +19,9 @@ define(['module/Aliens', 'module/Bullets', 'module/Explosions'], (Aliens, Bullet
             this._player.setExplosionGroup(new Explosions(1, 'kaboom', this._game));
 
             const alienConfiguration = {
-                scoreValue:10,
-                firingTime:200,
-                bulletSpeed:200,
+                firingTime: 200,
+                minBulletSpeed: 200,
+                maxBulletSpeed: 600,
                 easing: Phaser.Easing.Linear.None
             };
 
@@ -32,7 +32,6 @@ define(['module/Aliens', 'module/Bullets', 'module/Explosions'], (Aliens, Bullet
 
             this._player.setAliensAndAlienGroup(this._aliens);
 
-            //They start shoting, shooting is triggered by a time loop
             this._player.startShooting();
             this._aliens.startShooting();
         }
