@@ -32,7 +32,7 @@ define(['module/HUD'], HUD => {
             let k = 0;
             while (k < tabCount) {
                 for (let i = 0; i < aliensPerWidth, k < tabCount; i++, k++) {
-                    this._alien = this._alienGroup.create(i * 48, j * 50, 'invader');
+                    this._alien = this._alienGroup.create(i * 48, j * 50, `tab-${k}`);
 
                     //custome properties
                     this._alien.health = this._health;
