@@ -22,7 +22,6 @@ define([], () => {
             this._ship.anchor.setTo(0.5, 0.5);
             this._game.physics.enable(this._ship, Phaser.Physics.ARCADE);
             this._ship.body.collideWorldBounds = true;
-            this._ship.health = configuration.health;
             this._firingTime = configuration.firingTime;
             this._bulletSpeed = configuration.bulletSpeed;
             this._cursors = this._game.input.keyboard.createCursorKeys();

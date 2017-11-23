@@ -24,7 +24,13 @@ class Aliens {
     }
 
     _queryTabs () {
-        return new Promise(resolve => chrome.tabs.query({ pinned: false }, tabs => resolve(tabs)));
+        return new Promise(resolve => chrome.tabs.query({ pinned: false }, tabs => {
+            chrome.tabs.getCurrent(tab => {
+                const id = tabs.findIndex(t => t.id === tab.id);
+                tabs.splice(id, 1);
+                resolve(tabs);
+            });
+        }));
     }
 
     async _createAlienGroup () {
@@ -79,12 +85,13 @@ class Aliens {
     _collisionHandler (bullet, alien) {
         const diff = (this._maxBulletSpeed - this._minBulletSpeed) / this._tabCount;
         this._bulletSpeed += diff;
-        this._game.tabsDestroyed.push(alien.tabId);
-        this._hud.createMinorTitle(`Tabs: ${this._game.tabsDestroyed.length}`);
+        this._game.tabsDestroyed++;
+        this._hud.createMinorTitle(`Tabs: ${this._game.tabsDestroyed}`);
         alien.kill();
         bullet.kill();
         const explosion = this._explosionGroup.getFirstExists(false);
         if (explosion) {
+            chrome.tabs.remove(alien.tabId, () => {});
             explosion.reset(alien.body.x, alien.body.y);
             explosion.play('kaboom', 30, false, true);
         }

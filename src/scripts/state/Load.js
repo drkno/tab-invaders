@@ -7,13 +7,14 @@ define(['module/ImageLoader'], TabImageLoader => {
         }
 
         async create () {
-            this._hud.createTitle('Loading...');
-            this._game.tabsDestroyed = [];
+            this._hud.createMinorTitle2('Loading...');
+            this._game.tabsDestroyed = 0;
 
             const ld = new TabImageLoader();
             const tabImages = ld.getImages();
 
             this._game.load.spritesheet('kaboom', 'img/explode.png', 128, 128);
+            this._game.load.image('invader', 'img/icon/icon128.png');
             this._game.load.image('ship', 'img/player.png');
             this._game.load.image('bullet', 'img/bullet.png');
             this._game.load.image('enemyBullet', 'img/enemy-bullet.png');

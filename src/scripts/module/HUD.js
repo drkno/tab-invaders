@@ -8,7 +8,12 @@ class HUD {
     }
 
     createTitle (title) {
-        this._titleText = this._game.add.text(this._game.world.centerX, this._game.world.centerY, title, {font: '84px Arial', fill: '#fff'});
+        this._titleText = this._game.add.text(this._game.world.centerX, this._game.world.centerY, title, {
+            font: '84px Arial',
+            fill: 'black',
+            stroke: '#ff0',
+            strokeThickness: 4
+        });
         this._titleText.anchor.setTo(0.5, 0.5);
     }
 

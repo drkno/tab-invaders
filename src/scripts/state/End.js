@@ -9,23 +9,22 @@ class End {
 
     create () {
         this._hud.createTitle('Game Over');
-        this._hud.createSubTitle(`You murdered ${this._game.tabsDestroyed.length} tab${this._game.tabsDestroyed.length === 1 ? '' : 's'}.`);
+        this._hud.createSubTitle(`You destroyed ${this._game.tabsDestroyed} tab${this._game.tabsDestroyed === 1 ? '' : 's'}.`);
 
         chrome.storage.sync.get('highScore', highScore => {
-            if (!highScore || highScore < this._game.tabsDestroyed.length) {
-                chrome.storage.sync.set({highScore: this._game.tabsDestroyed.length}, () => {});
-                highScore = this._game.tabsDestroyed.length;
+            console.log(highScore);
+            if (!highScore || highScore < this._game.tabsDestroyed) {
+                chrome.storage.sync.set({highScore: this._game.tabsDestroyed}, () => {});
+                highScore = this._game.tabsDestroyed;
             }
             this._hud.createMinorTitle(`High score: ${highScore}`);
 
             this._interval = setInterval(() => {
-                this._hud.createMinorTitle2(`Closing tabs in ${--this._count}...`);
+                this._hud.createMinorTitle2(`Closing game in ${--this._count}...`);
                 if (this._count === 0) {
                     clearInterval(this._interval);
                     chrome.tabs.getCurrent(tab => {
-                        const tabs = this._game.tabsDestroyed.filter(t => !!t);
-                        tabs.push(tab.id);
-                        chrome.tabs.remove(tabs, () => {});
+                        chrome.tabs.remove(tab.id, () => {});
                     });
                 }
             }, 1000);
