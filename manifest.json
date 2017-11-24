@@ -1,6 +1,8 @@
 {
 	"manifest_version": 2,
 	"name": "tab-invaders",
+	"author": "Matthew Knox",
+	"homepage_url": "https://github.com/mrkno/tab-invaders",
 	"description": "Solve your tab addiction with a quick game of space invaders.",
 	"version": "1.0",
 	"icons": {
