@@ -1,6 +1,7 @@
 # tab-invaders
 
-[Download for Firefox here.](https://addons.mozilla.org/en-US/firefox/addon/tab-invaders/)
+[![Download for Firefox here.](https://addons.cdn.mozilla.net/static/img/addons-buttons/AMO-button_1.png)](https://addons.mozilla.org/en-US/firefox/addon/tab-invaders/)  
+Also supports Google Chrome
 
 Tabaholics beware, a new enemy is in town. Your tab collections are cowering in fear and sending their best fighters to protect them against the oncoming attack. But alas, their aim is that of storm-troopers and you are a master pilot.
 
