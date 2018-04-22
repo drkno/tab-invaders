@@ -27,5 +27,9 @@
 	"background": {
 		"scripts": ["src/invaders.js"],
 		"persistent": false
+	},
+	"options_ui": {
+		"page": "src/options.html",
+		"browser_style": true
 	}
 }
