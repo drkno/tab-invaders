@@ -14,6 +14,7 @@ define([], () => {
             this._aliens = null;
             this._shootingEnabled = null;
             this._bulletSpeed = null;
+            this._directions = {A: null, D: null};
         }
 
         create (configuration) {
@@ -25,6 +26,8 @@ define([], () => {
             this._firingTime = configuration.firingTime;
             this._bulletSpeed = configuration.bulletSpeed;
             this._cursors = this._game.input.keyboard.createCursorKeys();
+            this._directions.A = this._game.input.keyboard.addKey(Phaser.Keyboard.A);
+            this._directions.D = this._game.input.keyboard.addKey(Phaser.Keyboard.D);
             this._spacebar = this._game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
         }
 
@@ -56,10 +59,10 @@ define([], () => {
             if (this._spacebar.justDown) {
                 this._fireBullet();
             }
-            if (this._cursors.left.isDown) {
+            if (this._cursors.left.isDown || this._directions.A) {
                 this._ship.body.velocity.x = -200;
             }
-            else if (this._cursors.right.isDown) {
+            else if (this._cursors.right.isDown || this._directions.D) {
                 this._ship.body.velocity.x = 200;
             }
         }
