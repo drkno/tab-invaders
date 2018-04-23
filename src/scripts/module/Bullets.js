@@ -15,4 +15,4 @@ class Bullets {
     }
 }
 
-define(() => Bullets);
+export default Bullets;

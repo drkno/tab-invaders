@@ -1,21 +1,16 @@
-const updateSetting = (name, value) => {
+const updateSetting = async(name, value) => {
     const val = {};
     val[name] = val;
-    chrome.storage.sync.set(val, () => {});
+    await browser.storage.sync.set(val);
 };
 
-const getSetting = (name, callback) => {
-    chrome.storage.sync.get(name, callback);
-};
-
-document.addEventListener('DOMContentLoaded', () => {
-    getSetting('autoClose', autoClose => {
-        document.getElementById('autoCloseOnComplete').checked =
-            typeof(autoClose) === 'boolean' ? autoClose : true;
-    });
-    getSetting('highScore', highScore => {
-        document.getElementById('highScore').innerText = highScore || '0';
-    });
+document.addEventListener('DOMContentLoaded', async() => {
+    const autoClose = await browser.storage.sync.get('autoCloseOnComplete');
+    document.getElementById('autoCloseOnComplete').checked =
+        typeof(autoClose) === 'boolean' ? autoClose : true;
+    
+    const highScore = await browser.storage.sync.get('highScore');
+    document.getElementById('highScore').innerText = highScore || '0';
 });
 
 

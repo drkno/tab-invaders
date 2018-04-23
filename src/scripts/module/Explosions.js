@@ -13,4 +13,4 @@ class Explosions {
     }
 }
 
-define(() => Explosions);
+export default Explosions;

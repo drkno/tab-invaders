@@ -1,0 +1,36 @@
+{
+  "name": "tab-invaders",
+  "version": "1.1.0",
+  "description": "A game of space invaders to deal with your browser tabs",
+  "private": false,
+  "dependencies": {
+    "phaser-ce": "^2.10.3",
+    "webextension-polyfill": "^0.2.1"
+  },
+  "devDependencies": {
+    "webpack-cli": "^2.0.15",
+    "webpack": "^4.6.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mrkno/tab-invaders.git"
+  },
+  "keywords": [
+    "space",
+    "invaders",
+    "tabs",
+    "browser",
+    "webextension",
+    "firefox",
+    "chrome"
+  ],
+  "author": "Matthew Knox",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mrkno/tab-invaders/issues"
+  },
+  "homepage": "https://github.com/mrkno/tab-invaders#readme"
+}

@@ -6,9 +6,9 @@
 	"description": "Solve your tab addiction with a quick game of space invaders.",
 	"version": "1.0",
 	"icons": {
-		"16": "src/img/icon/icon16.png",
-		"48": "src/img/icon/icon48.png",
-		"128": "src/img/icon/icon128.png"
+		"16": "img/icon/icon16.png",
+		"48": "img/icon/icon48.png",
+		"128": "img/icon/icon128.png"
 	},
 	"permissions": [
 		"tabs",
@@ -18,18 +18,18 @@
 	],
 	"browser_action": {
 		"default_icon": {
-			"16": "src/img/icon/icon16.png",
-			"48": "src/img/icon/icon48.png",
-			"128": "src/img/icon/icon128.png"
+			"16": "img/icon/icon16.png",
+			"48": "img/icon/icon48.png",
+			"128": "img/icon/icon128.png"
 		},
 		"default_title": "Tab Invaders"
 	},
 	"background": {
-		"scripts": ["src/invaders.js"],
+		"scripts": ["scripts/invaders.js"],
 		"persistent": false
 	},
 	"options_ui": {
-		"page": "src/options.html",
+		"page": "views/options.html",
 		"browser_style": true
 	}
 }

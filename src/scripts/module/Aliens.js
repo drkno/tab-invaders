@@ -23,14 +23,12 @@ class Aliens {
         this._createAlienGroup();
     }
 
-    _queryTabs () {
-        return new Promise(resolve => chrome.tabs.query({ pinned: false }, tabs => {
-            chrome.tabs.getCurrent(tab => {
-                const id = tabs.findIndex(t => t.id === tab.id);
-                tabs.splice(id, 1);
-                resolve(tabs);
-            });
-        }));
+    async _queryTabs () {
+        const tabs = await browser.tabs.query({ pinned: false });
+        const tab = await browser.tabs.getCurrent();
+        const id = tabs.findIndex(t => t.id === tab.id);
+        tabs.splice(id, 1);
+        return tabs;
     }
 
     async _createAlienGroup () {
@@ -43,7 +41,7 @@ class Aliens {
         while (k < this._tabCount) {
             for (let i = 0; i < aliensPerWidth && k < this._tabCount; i++, k++) {
                 const alien = this._alienGroup.create(i * 48, j * 50, `tab-${k}`);
-                alien.tabId = tabs[k].id && tabs[k].id !== chrome.tabs.TAB_ID_NONE ? tabs[k].id : null;
+                alien.tabId = tabs[k].id && tabs[k].id !== browser.tabs.TAB_ID_NONE ? tabs[k].id : null;
                 alien.anchor.setTo(0.5, 0.5);
                 alien.animations.add('fly', [ 0, 1, 2, 3 ], 20, true);
                 alien.play('fly');
@@ -91,7 +89,7 @@ class Aliens {
         bullet.kill();
         const explosion = this._explosionGroup.getFirstExists(false);
         if (explosion) {
-            chrome.tabs.remove(alien.tabId, () => {});
+            browsers.tabs.remove(alien.tabId);
             explosion.reset(alien.body.x, alien.body.y);
             explosion.play('kaboom', 30, false, true);
         }
@@ -129,4 +127,5 @@ class Aliens {
         this._playerShip = playerShip;
     }
 }
-define([], () => Aliens);
+
+export default Aliens;

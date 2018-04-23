@@ -136,4 +136,4 @@ var TabFavIconHelper = {
 };
 TabFavIconHelper.init();
 
-define([], () => TabFavIconHelper);
+export default TabFavIconHelper;

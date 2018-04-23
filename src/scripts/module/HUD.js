@@ -39,4 +39,4 @@ class HUD {
     }
 }
 
-define(() => HUD);
+export default HUD;
