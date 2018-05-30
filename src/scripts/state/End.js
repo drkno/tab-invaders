@@ -11,7 +11,7 @@ class End {
         this._hud.createTitle('Game Over');
         this._hud.createSubTitle(`You destroyed ${this._game.tabsDestroyed} tab${this._game.tabsDestroyed === 1 ? '' : 's'}.`);
 
-        const highScore = await browser.storage.sync.get('highScore');
+        let highScore = await browser.storage.sync.get('highScore');
         if (!highScore || highScore < this._game.tabsDestroyed) {
             await browser.storage.sync.set({highScore: this._game.tabsDestroyed});
             highScore = this._game.tabsDestroyed;
