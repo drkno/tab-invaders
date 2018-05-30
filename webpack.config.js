@@ -2,13 +2,23 @@ const path = require('path');
 const webpack = require('webpack');
 
 module.exports = {
-    entry: './src/scripts/main.js',
+    entry: ['webextension-polyfill', './src/scripts/main.js'],
     output: {
-        path: path.resolve(__dirname, 'build'),
-        filename: 'main.bundle.js'
+        path: path.join(__dirname, 'build', 'extension'),
+        filename: '[name].js'
     },
     module: {
         rules: [
+            {
+                test: /\.css$/,
+                loader: "style-loader!css-loader",
+                exclude: /node_modules/
+            },
+            {
+                test: /\.html$/,
+                loader: "html-loader",
+                exclude: /node_modules/
+            },
             {
                 test: /\.js$/,
                 loader: 'babel-loader',
@@ -18,6 +28,11 @@ module.exports = {
             }
         ]
     },
+    plugins: [
+        new webpack.DefinePlugin({
+            'process.env.NODE_ENV': '"production"'
+        })
+    ],
     stats: {
         colors: true
     },
