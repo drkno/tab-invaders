@@ -1,4 +1,9 @@
 import { TabImageLoader } from '../module';
+import ExplodeImage from '../../img/explode.png';
+import InvaderImage from '../../img/icon/icon128.png';
+import PlayerImage from '../../img/player.png';
+import BulletImage from '../../img/bullet.png';
+import EnemyBulletImage from '../../img/enemy-bullet.png';
 
 class Load {
     constructor(game, nextStage, hud) {
@@ -14,11 +19,11 @@ class Load {
         const ld = new TabImageLoader();
         const tabImages = ld.getImages();
 
-        this._game.load.spritesheet('kaboom', 'img/explode.png', 128, 128);
-        this._game.load.image('invader', 'img/icon/icon128.png');
-        this._game.load.image('ship', 'img/player.png');
-        this._game.load.image('bullet', 'img/bullet.png');
-        this._game.load.image('enemyBullet', 'img/enemy-bullet.png');
+        this._game.load.spritesheet('kaboom', ExplodeImage, 128, 128);
+        this._game.load.image('invader', InvaderImage);
+        this._game.load.image('ship', PlayerImage);
+        this._game.load.image('bullet', BulletImage);
+        this._game.load.image('enemyBullet', EnemyBulletImage);
 
         const images = await tabImages;
         for (let i = 0; i < images.length; i++) {

@@ -25,7 +25,9 @@
 		"default_title": "Tab Invaders"
 	},
 	"background": {
-		"scripts": ["scripts/invaders.js"],
+		"scripts": [
+			"scripts/invaders.js"
+		],
 		"persistent": false
 	},
 	"options_ui": {

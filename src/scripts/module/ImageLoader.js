@@ -1,8 +1,9 @@
 import TabFavIconHelper from '../util';
+import TabIcon from '../../img/tab.png';
 
 class TabImageLoader {
     constructor() {
-        this._base = this._loadImage('img/tab.png');
+        this._base = this._loadImage(TabIcon);
         this._tabs = this._queryTabs({ pinned: false });
         this._squareSize = 35;
     }
@@ -19,14 +20,14 @@ class TabImageLoader {
     async _combineImages (baseImage, b) {
         const c = document.createElement('canvas');
         c.width = c.height = this._squareSize;
-        const ctx = c.getContext("2d");
+        const ctx = c.getContext('2d');
         ctx.drawImage(baseImage, 0, 0, this._squareSize, this._squareSize);
         if (b) {
             const quarter = this._squareSize / 4;
             const faviconImage = await this._loadImage(b);
             ctx.drawImage(faviconImage, quarter, 1.35 * quarter, 2 * quarter, 2 * quarter);
         }
-        return c.toDataURL("image/png");
+        return c.toDataURL('image/png');
     }
 
     async _queryTabs (options) {
