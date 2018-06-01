@@ -1,3 +1,5 @@
+import 'webextension-polyfill';
+
 class Aliens {
     constructor (configuration, game, hud) {
         this._game = game;

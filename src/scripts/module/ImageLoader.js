@@ -1,3 +1,4 @@
+import 'webextension-polyfill';
 import TabFavIconHelper from '../util';
 import TabIcon from '../../img/tab.png';
 

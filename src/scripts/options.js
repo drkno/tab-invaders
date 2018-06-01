@@ -1,3 +1,5 @@
+import 'webextension-polyfill';
+
 const updateSetting = async(name, value) => {
     const val = {};
     val[name] = val;

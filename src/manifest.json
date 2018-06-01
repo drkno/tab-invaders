@@ -1,14 +1,9 @@
 {
 	"manifest_version": 2,
-	"name": "tab-invaders",
-	"author": "Matthew Knox",
-	"homepage_url": "https://github.com/mrkno/tab-invaders",
-	"description": "Solve your tab addiction with a quick game of space invaders.",
-	"version": "1.0",
 	"icons": {
-		"16": "img/icon/icon16.png",
-		"48": "img/icon/icon48.png",
-		"128": "img/icon/icon128.png"
+		"16": "./img/icon/icon16.png",
+		"48": "./img/icon/icon48.png",
+		"128": "./img/icon/icon128.png"
 	},
 	"permissions": [
 		"tabs",
@@ -18,20 +13,20 @@
 	],
 	"browser_action": {
 		"default_icon": {
-			"16": "img/icon/icon16.png",
-			"48": "img/icon/icon48.png",
-			"128": "img/icon/icon128.png"
+			"16": "./img/icon/icon16.png",
+			"48": "./img/icon/icon48.png",
+			"128": "./img/icon/icon128.png"
 		},
 		"default_title": "Tab Invaders"
 	},
 	"background": {
 		"scripts": [
-			"scripts/invaders.js"
+			"./scripts/invaders.js"
 		],
 		"persistent": false
 	},
 	"options_ui": {
-		"page": "views/options.html",
+		"page": "./views/options.html",
 		"browser_style": true
 	}
 }

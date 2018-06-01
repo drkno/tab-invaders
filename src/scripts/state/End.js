@@ -1,3 +1,5 @@
+import 'webextension-polyfill';
+
 class End {
     constructor (game, nextState, hud) {
         this._game = game;

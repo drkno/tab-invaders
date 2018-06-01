@@ -4,6 +4,7 @@
    http://github.com/piroor/webextensions-lib-tab-favicon-helper
 */
 'use strict';
+import 'webextension-polyfill';
 
 var TabFavIconHelper = {
   LAST_EFFECTIVE_FAVICON: 'last-effective-favIcon',
