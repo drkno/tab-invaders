@@ -14,5 +14,3 @@ document.addEventListener('DOMContentLoaded', async() => {
     const highScore = await browser.storage.sync.get('highScore');
     document.getElementById('highScore').innerText = highScore || '0';
 });
-
-

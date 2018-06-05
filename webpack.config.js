@@ -36,8 +36,8 @@ module.exports = {
             // },
             {
                 test: /\.html$/,
-                // loader: 'file-loader?name=[path][name].[ext]!extract-loader!html-loader?attrs=img:src link:href script:src',
-                loader: 'file-loader?name=[path][name].[ext]!extract-loader!html-loader?interpolate',
+                loader: 'file-loader?name=[path][name].[ext]!extract-loader!html-loader?attrs=img:src link:href script:src!webext-html-loader',
+                // loader: 'file-loader?name=[path][name].[ext]!extract-loader!html-loader?interpolate',
                 exclude: /node_modules/
             },
             {
