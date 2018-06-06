@@ -1,14 +1,18 @@
-import { Load, Start, Play, End } from './state';
-import { HUD, Player } from './module';
-import Phaser from 'phaser-ce';
+import executeButton from './button';
+import executeGame from './game';
+import executeOptions from './options';
 
-const game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.AUTO, 'game');
-const hud = new HUD(game);
-const player = new Player(game, hud);
+const main = () => {
+    const loc = document.location.pathname;
+    if (loc === '/index.html') {
+        executeGame();
+    }
+    else if (loc === '/options.html') {
+        executeOptions();
+    }
+    else {
+        executeButton();
+    }
+};
 
-game.state.add('Load', new Load(game, 'Start', hud));
-game.state.add('Start', new Start(game, 'Play', hud));
-game.state.add('Play', new Play(game, 'End', player, hud));
-game.state.add('End', new End(game, 'Play', hud));
-
-game.state.start('Load');
+main();

@@ -8,9 +8,9 @@
         <p>High Score:<span id="highScore"></span></p>
         <hr />
         <form>
-            <input type="checkbox" id="autoCloseOnComplete" onchange="updateSetting('autoCloseOnComplete', this.checked);" />
+            <input type="checkbox" id="autoCloseOnComplete" />
             <label for="autoCloseOnComplete">Auto-close game on loss/win</label>
         </form>
-        <script src="${require('../scripts/options.js')}"></script>
+        <script src="../../background.js"></script>
     </body>
 </html>

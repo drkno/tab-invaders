@@ -28,16 +28,9 @@ module.exports = {
                 loader: 'file-loader',
                 exclude: [/node_modules/, /src\/img\/screenshots/]
             },
-            // {
-            //     test: /\.css$/,
-            //     // loader: 'file-loader?name=[path][name].[ext]!extract-loader!css-loader',
-            //     loader: 'style-loader!css-loader',
-            //     exclude: /node_modules/
-            // },
             {
                 test: /\.html$/,
-                // loader: 'file-loader?name=[path][name].[ext]!extract-loader!html-loader?attrs=img:src link:href script:src',
-                loader: 'file-loader?name=[path][name].[ext]!extract-loader!html-loader?interpolate',
+                loader: 'file-loader?name=[name].[ext]!extract-loader!html-loader?attrs=img:src link:href',
                 exclude: /node_modules/
             },
             {
@@ -59,6 +52,6 @@ module.exports = {
     stats: {
         colors: true
     },
-    devtool: 'source-map',
+    devtool: process.env.WEBPACK_MODE === 'production' ? false : 'source-map',
     target: 'web'
 };

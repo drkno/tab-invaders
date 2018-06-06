@@ -11,6 +11,7 @@
     "babel-loader": "^7.1.4",
     "clean-webpack-plugin": "^0.1.19",
     "css-loader": "^0.28.11",
+    "expose-loader": "^0.7.5",
     "extract-loader": "^2.0.1",
     "file-loader": "^1.1.11",
     "html-loader": "^0.5.5",
@@ -23,9 +24,11 @@
   },
   "scripts": {
     "build": "webpack --mode=development --display-error-details --progress --colors",
-    "build:prod": "webpack --mode=production --display-error-details --progress --colors",
+    "build:prod": "webpack --mode=production --display-error-details --progress --colors && npm run build:prod:package",
+    "build:prod:package": "web-ext build -a build/ -s build/extension/ -o",
     "build:watch": "npm run build -- -w",
-    "start": "npm run build && web-ext run -s build/extension/"
+    "start:firefox": "npm run build && web-ext run -s build/extension/ --verbose",
+    "start:firefox-nightly": "npm run build && web-ext run --firefox=nightly -s build/extension/ --verbose"
   },
   "repository": {
     "type": "git",

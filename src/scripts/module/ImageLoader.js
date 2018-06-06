@@ -1,8 +1,8 @@
-import 'webextension-polyfill';
+import browser from 'webextension-polyfill';
 import TabFavIconHelper from '../util';
 import TabIcon from '../../img/tab.png';
 
-class TabImageLoader {
+class ImageLoader {
     constructor() {
         this._base = this._loadImage(TabIcon);
         this._tabs = this._queryTabs({ pinned: false });
@@ -56,5 +56,5 @@ class TabImageLoader {
     }
 }
 
-export default TabImageLoader;
+export default ImageLoader;
     

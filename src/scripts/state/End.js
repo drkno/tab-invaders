@@ -1,4 +1,4 @@
-import 'webextension-polyfill';
+import browser from 'webextension-polyfill';
 
 class End {
     constructor (game, nextState, hud) {

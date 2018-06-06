@@ -1,4 +1,5 @@
-import { TabImageLoader } from '../module';
+import browser from 'webextension-polyfill';
+import { ImageLoader } from '../module';
 import ExplodeImage from '../../img/explode.png';
 import InvaderImage from '../../img/icon/icon128.png';
 import PlayerImage from '../../img/player.png';
@@ -16,7 +17,7 @@ class Load {
         this._hud.createMinorTitle2('Loading...');
         this._game.tabsDestroyed = 0;
 
-        const ld = new TabImageLoader();
+        const ld = new ImageLoader();
         const tabImages = ld.getImages();
 
         this._game.load.spritesheet('kaboom', ExplodeImage, 128, 128);
