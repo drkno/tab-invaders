@@ -91,7 +91,7 @@ class Aliens {
         bullet.kill();
         const explosion = this._explosionGroup.getFirstExists(false);
         if (explosion) {
-            browsers.tabs.remove(alien.tabId);
+            browser.tabs.remove(alien.tabId);
             explosion.reset(alien.body.x, alien.body.y);
             explosion.play('kaboom', 30, false, true);
         }

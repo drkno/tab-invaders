@@ -27,7 +27,8 @@
 	},
 	"options_ui": {
 		"page": "./views/options.html",
-		"browser_style": true
+		"browser_style": true,
+		"chrome_style": true
 	},
 	"applications": {
 		"gecko": {

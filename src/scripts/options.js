@@ -1,29 +1,30 @@
 import browser from 'webextension-polyfill';
 
-const updateSetting = async(name, value) => {
+export const updateSetting = async(name, value) => {
     const val = {};
     val[name] = value;
-    return await browser.storage.sync.set(val);
+    await browser.storage.sync.set(val);
+    return value;
 };
 
-const getSetting = async(name) => {
-    const value = await browser.storage.sync.get(name);
-    return value[name];
+export const getSetting = async(name, def) => {
+    const storage = await browser.storage.sync.get(name);
+    const value = storage[name];
+    if (value === void(0) && def !== void(0)) {
+        return await updateSetting(name, def);
+    }
+    return value;
 };
 
 export default () => {
     document.addEventListener('DOMContentLoaded', async() => {
-        const autoClose = await getSetting('autoCloseOnComplete');
         const autoCloseCheckbox = document.getElementById('autoCloseOnComplete');
 
-        autoCloseCheckbox.checked = typeof(autoClose) === 'boolean' ? autoClose : true;
+        autoCloseCheckbox.checked = await getSetting('autoCloseOnComplete', true);
         autoCloseCheckbox.addEventListener('click', () => {
             updateSetting('autoCloseOnComplete', autoCloseCheckbox.checked);
         });
         
-        const highScore = await getSetting('highScore');
-        document.getElementById('highScore').innerText = highScore || '0';
+        document.getElementById('highScore').innerText = await getSetting('highScore', 0);
     });
 };
-
-export { updateSetting, getSetting };

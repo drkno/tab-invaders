@@ -58,10 +58,10 @@ class Player {
         if (this._spacebar.justDown) {
             this._fireBullet();
         }
-        if (this._cursors.left.isDown || this._directions.A) {
+        if (this._cursors.left.isDown || this._directions.A.isDown) {
             this._ship.body.velocity.x = -200;
         }
-        else if (this._cursors.right.isDown || this._directions.D) {
+        else if (this._cursors.right.isDown || this._directions.D.isDown) {
             this._ship.body.velocity.x = 200;
         }
     }
