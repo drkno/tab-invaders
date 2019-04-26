@@ -1,6 +1,5 @@
 import browser from 'webextension-polyfill';
-import { getSetting, updateSetting } from '../options.js';
-import sleep from '../util/sleep.js';
+import { sleep, settings } from '../util';
 
 class End {
     constructor (game, nextState, hud) {
@@ -18,7 +17,7 @@ class End {
     }
 
     async _renderCloseTimer() {
-        const secondsBeforeClose = await getSetting('closeTimeout', 4);
+        const secondsBeforeClose = await settings.closeWaitTime();
         for (let i = secondsBeforeClose; i > 0; i--) {
             this._hud.createMinorTitle2(`Closing game in ${i} second${i === 1 ? '' : 's'}...`);
             await sleep(1000);
@@ -34,16 +33,18 @@ class End {
     }
 
     async _getHighScore(tabs) {
-        let highScore = await getSetting('highScore', 0);
+        let highScore = await settings.highScore();
         if (highScore < tabs) {
-            highScore = await updateSetting('highScore', tabs);
+            highScore = await settings.highScore(tabs);
         }
+        const totalTabs = await settings.totalTabs();
+        await settings.totalTabs(totalTabs + tabs);
         return highScore;
     }
 
     async create () {
         const highScore = await this._getHighScore(this._game.tabsDestroyed);
-        const autoClose = await getSetting('autoCloseOnComplete', true);
+        const autoClose = await settings.closeOnComplete();
 
         await this._renderGameOver(this._game.tabsDestroyed, highScore);
         if (autoClose) {

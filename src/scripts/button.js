@@ -1,10 +1,8 @@
 import browser from 'webextension-polyfill';
-import IndexHtml from '../views/index.html';
+import GameHtml from '../views/game.html';
 
-export default () => {
-	browser.browserAction.onClicked.addListener(tab => {
-		browser.tabs.create({
-			url: browser.extension.getURL(IndexHtml)
-		});
+browser.browserAction.onClicked.addListener(tab => {
+	browser.tabs.create({
+		url: browser.extension.getURL(GameHtml)
 	});
-};
+});

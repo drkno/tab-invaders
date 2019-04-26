@@ -1,5 +1,5 @@
 import browser from 'webextension-polyfill';
-import TabFavIconHelper from '../util';
+import { faviconHelper } from '../util';
 import TabIcon from '../../img/tab.png';
 
 class ImageLoader {
@@ -42,7 +42,7 @@ class ImageLoader {
             promises.push(new Promise(async(resolve) => {
                 const base = await this._base;
                 try {
-                    const url = await TabFavIconHelper.getEffectiveURL(tab);
+                    const url = await faviconHelper.getEffectiveURL(tab);
                     const img = await this._combineImages(base, url);
                     resolve(img);
                 }

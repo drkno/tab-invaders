@@ -1,19 +1,17 @@
-const path = require('path');
-const webpack = require('webpack');
+const { join } = require('path');
+const { DefinePlugin } = require('webpack');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const SuppressChunksPlugin = (require('suppress-chunks-webpack-plugin')).default;
-const { getEntryPoints } = require('./scripts/manifest-manipulator.js');
-const manifest = require('./src/manifest.json');
 
-const entryPoints = getEntryPoints(manifest);
+const getEntryPoints = require('./scripts/entry-point-locator');
 
 module.exports = {
     resolveLoader: {
-        modules: [path.join(__dirname, 'scripts'), 'node_modules']
+        modules: [join(__dirname, 'scripts'), 'node_modules']
     },
-    entry: entryPoints,
+    entry: getEntryPoints('./src/'),
     output: {
-        path: path.join(__dirname, 'build', 'extension'),
+        path: join(__dirname, 'build', 'extension'),
         filename: '[name].js'
     },
     module: {
@@ -26,25 +24,40 @@ module.exports = {
             {
                 test: /\.(png|jpe?g|gif|css)$/,
                 loader: 'file-loader',
-                exclude: [/node_modules/, /src\/img\/screenshots/]
+                exclude: [/src\/img\/screenshots/]
             },
             {
                 test: /\.html$/,
-                loader: 'file-loader?name=[name].[ext]!extract-loader!html-loader?attrs=img:src link:href',
-                exclude: /node_modules/
+                loader: 'file-loader?name=[name].[ext]!extract-loader!html-loader?attrs=img:src link:href!html-entry-loader',
             },
             {
                 test: /\.js$/,
                 loader: 'babel-loader',
                 query: {
-                    presets: ['es2015']
+                    presets: [
+                        [
+                            '@babel/preset-env',
+                            {
+                                'targets': {
+                                    'firefox': '60',
+                                    'chrome': '58'
+                                }
+                            }
+                        ]
+                    ],
+                    plugins: [
+                        '@babel/plugin-proposal-class-properties',
+                        ['@babel/plugin-transform-react-jsx', {
+                            'pragma': 'preact.h'
+                        }]
+                    ]
                 }
             }
         ]
     },
     plugins: [
-        new CleanWebpackPlugin(['build']),
-        new webpack.DefinePlugin({
+        new CleanWebpackPlugin(),
+        new DefinePlugin({
             'process.env.NODE_ENV': '"production"'
         }),
         new SuppressChunksPlugin(['manifest'])

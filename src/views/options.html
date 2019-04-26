@@ -1,25 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css" />
+    <title>Tab Invaders</title>
 </head>
-
 <body>
-    <header class="panel-section panel-section-header">
-        <div class="text-section-header">
-            High Score:&nbsp;<span id="highScore"></span>
-        </div>
-    </header>
-    <div class="panel-section panel-section-formElements">
-        <div class="panel-formElements-item browser-style">
-            <input type="checkbox" id="autoCloseOnComplete" />
-            <label for="autoCloseOnComplete">Auto-close game on loss/win</label>
-        </div>
-        <div class="panel-formElements-item browser-style">
-            <input type="number" id="autoCloseWaitTime" />
-            <label for="autoCloseWaitTime">Seconds to wait before aut-closing the game</label>
-        </div>
-    </div>
-    <script src="../../background.js"></script>
+    <div id="preact-root"></div>
+    <script src="../scripts/options.js"></script>
 </body>
 </html>

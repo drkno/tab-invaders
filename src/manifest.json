@@ -21,19 +21,18 @@
 	},
 	"background": {
 		"scripts": [
-			"./scripts/main.js"
+			"./scripts/button.js"
 		],
 		"persistent": false
 	},
 	"options_ui": {
 		"page": "./views/options.html",
-		"browser_style": true,
-		"chrome_style": true
+		"open_in_tab": true
 	},
 	"applications": {
 		"gecko": {
-			"id": "addon@example.com",
-			"strict_min_version": "42.0"
+			"id": "placeholder",
+			"strict_min_version": "48.0"
 		}
 	}
 }

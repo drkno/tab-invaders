@@ -4,7 +4,7 @@ import Phaser from 'expose-loader?Phaser!phaser-ce/build/custom/phaser-split.js'
 import { Load, Start, Play, End } from './state';
 import { HUD, Player } from './module';
 
-export default () => {
+const main = () => {
     const game = new Phaser.Game(window.innerWidth, window.innerHeight, Phaser.AUTO, 'game');
     const hud = new HUD(game);
     const player = new Player(game, hud);
@@ -16,3 +16,5 @@ export default () => {
 
     game.state.start('Load');
 };
+
+main();
