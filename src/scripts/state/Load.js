@@ -18,7 +18,7 @@ class Load {
         this._game.tabsDestroyed = 0;
 
         const ld = new ImageLoader();
-        const tabImages = ld.getImages();
+        const tabImages = await ld.getImages();
 
         this._game.load.spritesheet('kaboom', ExplodeImage, 128, 128);
         this._game.load.image('invader', InvaderImage);

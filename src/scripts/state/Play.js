@@ -1,4 +1,5 @@
 import { Aliens, Bullets, Explosions } from '../module';
+import { settings } from '../util';
 
 class Play {
     constructor (game, nextState, player, hud) {
@@ -7,15 +8,16 @@ class Play {
         this._player = player;
         this._hud = hud;
         this._aliens = null;
+        this._loadComplete = false;
     }
 
-    create () {
+    async create () {
         const playerConfiguration = {
             firingTime: 300,
             bulletSpeed: 500
         };
 
-        this._player.create(playerConfiguration);
+        await this._player.create(playerConfiguration);
         this._player.setBulletGroup(new Bullets(10, 'bullet', 100, this._game));
         this._player.setExplosionGroup(new Explosions(1, 'kaboom', this._game));
 
@@ -35,9 +37,16 @@ class Play {
 
         this._player.startShooting();
         this._aliens.startShooting();
+        this._loadComplete = true;
+
+        const currentPlayCount = await settings.playCount();
+        settings.playCount(currentPlayCount + 1);
     }
 
     update () {
+        if (!this._loadComplete) {
+            return;
+        }
         this._player.update();
         this._aliens.createOverLap(this._player.getBulletGroup());
         this._player.createOverLap(this._aliens.getBulletGroup());

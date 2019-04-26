@@ -1,4 +1,5 @@
 import browser from 'webextension-polyfill';
+import { queryTabs } from '../util';
 
 class Aliens {
     constructor (configuration, game, hud) {
@@ -25,16 +26,8 @@ class Aliens {
         this._createAlienGroup();
     }
 
-    async _queryTabs () {
-        const tabs = await browser.tabs.query({ pinned: false });
-        const tab = await browser.tabs.getCurrent();
-        const id = tabs.findIndex(t => t.id === tab.id);
-        tabs.splice(id, 1);
-        return tabs;
-    }
-
     async _createAlienGroup () {
-        const tabs = await this._queryTabs();
+        const tabs = await queryTabs();
         this._tabCount = tabs.length;
         const aliensPerWidth = ((window.innerWidth / 48) / 2) | 0;
 

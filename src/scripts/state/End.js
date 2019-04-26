@@ -1,5 +1,5 @@
 import browser from 'webextension-polyfill';
-import { sleep, settings } from '../util';
+import { sleep, settings, keyboardKeys, queryTabs } from '../util';
 
 class End {
     constructor (game, nextState, hud) {
@@ -9,11 +9,12 @@ class End {
     }
 
     async _renderRestartMessage() {
-        this._game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR).onDown.addOnce(() => {
+        const fireKey = await settings.fireButton();
+        this._game.input.keyboard.addKey(fireKey).onDown.addOnce(() => {
             this._game.tabsDestroyed = 0;
             this._game.state.start(this._nextState);
         });
-        this._hud.createMinorTitle2('Press space play again.');
+        this._hud.createMinorTitle2(`Press ${keyboardKeys.keyCodeToName(fireKey)} to play again.`);
     }
 
     async _renderCloseTimer() {
@@ -50,7 +51,7 @@ class End {
         if (autoClose) {
             await this._renderCloseTimer();
         }
-        else {
+        else if ((await queryTabs()).length > 0) {
             await this._renderRestartMessage();
         }
     }

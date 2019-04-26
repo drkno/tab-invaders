@@ -1,10 +1,11 @@
+import { settings } from '../util';
+
 class Player {
     constructor (game, hud) {
         this._game = game;
         this._hud = hud;
         this._firingTime = null;
         this._ship = null;
-        this._cursors = null;
         this._spacebar = null;
         this._bulletGroup = null;
         this._bullet = null;
@@ -13,10 +14,15 @@ class Player {
         this._aliens = null;
         this._shootingEnabled = null;
         this._bulletSpeed = null;
-        this._directions = {A: null, D: null};
+        this._keyboardKeys = {
+            LEFT: null,
+            RIGHT: null,
+            FIRE: null
+        };
+        this._bulletCounter = 0;
     }
 
-    create (configuration) {
+    async create (configuration) {
         this._hud.createMinorTitle('Tabs: 0');
         this._ship = this._game.add.sprite(window.innerWidth / 2, window.innerHeight, 'ship');
         this._ship.anchor.setTo(0.5, 0.5);
@@ -24,10 +30,9 @@ class Player {
         this._ship.body.collideWorldBounds = true;
         this._firingTime = configuration.firingTime;
         this._bulletSpeed = configuration.bulletSpeed;
-        this._cursors = this._game.input.keyboard.createCursorKeys();
-        this._directions.A = this._game.input.keyboard.addKey(Phaser.Keyboard.A);
-        this._directions.D = this._game.input.keyboard.addKey(Phaser.Keyboard.D);
-        this._spacebar = this._game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+        this._keyboardKeys.LEFT = this._game.input.keyboard.addKey(await settings.leftButton());
+        this._keyboardKeys.RIGHT = this._game.input.keyboard.addKey(await settings.rightButton());
+        this._keyboardKeys.FIRE = this._game.input.keyboard.addKey(await settings.fireButton());
     }
 
     _fireBullet () {
@@ -37,6 +42,7 @@ class Player {
         this._bullet = this._bulletGroup.getFirstExists(false);
 
         if (this._bullet) {
+            this._bulletCounter++;
             this._bullet.checkWorldBounds = true;
             this._bullet.reset(this._ship.x, this._ship.y + 8);
             this._bullet.body.velocity.y = -this._bulletSpeed;
@@ -50,18 +56,24 @@ class Player {
         const explosion = this._explosionGroup.getFirstExists(false);
         explosion.reset(this._ship.body.x, this._ship.body.y);
         explosion.play('kaboom', 30, false, true);
-        setTimeout(() => this._game.state.start('End'), 1000);
+        setTimeout(async() => {
+            const currentBulletCount = await settings.bulletsFired();
+            await settings.bulletsFired(currentBulletCount + this._bulletCounter);
+            this._game.state.start('End');
+        }, 1000);
     }
 
     update () {
         this._ship.body.velocity.setTo(0, 0);
-        if (this._spacebar.justDown) {
+
+        if (this._keyboardKeys.FIRE.justDown) {
             this._fireBullet();
         }
-        if (this._cursors.left.isDown || this._directions.A.isDown) {
+
+        if (this._keyboardKeys.LEFT.isDown) {
             this._ship.body.velocity.x = -200;
         }
-        else if (this._cursors.right.isDown || this._directions.D.isDown) {
+        else if (this._keyboardKeys.RIGHT.isDown) {
             this._ship.body.velocity.x = 200;
         }
     }

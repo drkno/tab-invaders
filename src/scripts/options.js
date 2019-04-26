@@ -1,5 +1,5 @@
 import preact from 'preact';
-import { settings } from './util';
+import { settings, keyboardKeys } from './util';
 
 class InlineLoader extends preact.Component {
     loaderColours = [
@@ -38,12 +38,14 @@ class OptionsUiComponent extends preact.Component {
     state = {
         highScore: -1,
         totalTabs: -1,
-        keysPressed: -1,
+        bulletsFired: -1,
+        playCount: -1,
         closeWaitTime: -1,
         closeOnComplete: null,
         ignorePinnedTabs: null,
         leftButton: null,
         rightButton: null,
+        fireButton: null,
         settingHasChanged: false
     };
 
@@ -63,12 +65,14 @@ class OptionsUiComponent extends preact.Component {
         // load individually so each piece of the UI is avalible when complete
         settings.highScore().then(highScore => this.setState({ highScore }));
         settings.totalTabs().then(totalTabs => this.setState({ totalTabs }));
-        settings.keysPressed().then(keysPressed => this.setState({ keysPressed }));
+        settings.bulletsFired().then(bulletsFired => this.setState({ bulletsFired }));
+        settings.playCount().then(playCount => this.setState({ playCount }));
         settings.closeWaitTime().then(closeWaitTime => this.setState({ closeWaitTime }));
         settings.closeOnComplete().then(closeOnComplete => this.setState({ closeOnComplete }));
         settings.ignorePinnedTabs().then(ignorePinnedTabs => this.setState({ ignorePinnedTabs }));
         settings.leftButton().then(leftButton => this.setState({ leftButton }));
         settings.rightButton().then(rightButton => this.setState({ rightButton }));
+        settings.fireButton().then(fireButton => this.setState({ fireButton }));
     }
 
     async resetSettings() {
@@ -126,10 +130,18 @@ class OptionsUiComponent extends preact.Component {
                             </td>
                         </tr>
                         <tr>
-                            <th scope="row">Keys Pressed</th>
+                            <th scope="row">Bullets Fired</th>
                             <td className="text-right">
-                                <InlineLoader value={this.state.keysPressed} unloadedValue={-1}>
-                                    {this.state.keysPressed}
+                                <InlineLoader value={this.state.bulletsFired} unloadedValue={-1}>
+                                    {this.state.bulletsFired}
+                                </InlineLoader>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Play Count</th>
+                            <td className="text-right">
+                                <InlineLoader value={this.state.playCount} unloadedValue={-1}>
+                                    {this.state.playCount}
                                 </InlineLoader>
                             </td>
                         </tr>
@@ -139,18 +151,12 @@ class OptionsUiComponent extends preact.Component {
         );
     }
 
-    generateKeyMenuOptions() {
-        return Array.from(Array(128 - 33).keys()).map(i => String.fromCharCode(i + 32)).concat([
-            'ENTER',
-            'LEFT',
-            'RIGHT',
-            'UP',
-            'DOWN',
-            'SHIFT',
-            'CTRL'
-        ]).map(arg => (
-            <option value={arg}>{arg}</option>
-        ));
+    generateKeyMenuOptions(...excluded) {
+        return Object.keys(keyboardKeys)
+            .filter(k => !excluded.includes(keyboardKeys[k]))
+            .map(k => (
+                <option value={keyboardKeys[k]}>{k}</option>
+            ));
     }
 
     renderSettings() {
@@ -240,7 +246,7 @@ class OptionsUiComponent extends preact.Component {
                                 <select className="custom-select"
                                         value={this.state.leftButton}
                                         onChange={e => this.saveSettingChange('leftButton', e.target.value)}>
-                                    {this.generateKeyMenuOptions(this.state.leftButton)}
+                                    {this.generateKeyMenuOptions(this.state.fireButton, this.state.rightButton)}
                                 </select>
                             </InlineLoader>
                         </div>
@@ -252,7 +258,19 @@ class OptionsUiComponent extends preact.Component {
                                 <select className="custom-select"
                                         value={this.state.rightButton}
                                         onChange={e => this.saveSettingChange('rightButton', e.target.value)}>
-                                    {this.generateKeyMenuOptions(this.state.rightButton)}
+                                    {this.generateKeyMenuOptions(this.state.fireButton, this.state.leftButton)}
+                                </select>
+                            </InlineLoader>
+                        </div>
+                    </div>
+                    <div className="form-group row align-items-center">
+                        <div className="col-sm-4">Fire button</div>
+                        <div className="col-sm-8">
+                            <InlineLoader value={this.state.fireButton} unloadedValue={null}>
+                                <select className="custom-select"
+                                        value={this.state.fireButton}
+                                        onChange={e => this.saveSettingChange('fireButton', e.target.value)}>
+                                    {this.generateKeyMenuOptions(this.state.leftButton, this.state.rightButton)}
                                 </select>
                             </InlineLoader>
                         </div>

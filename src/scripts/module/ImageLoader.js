@@ -1,11 +1,9 @@
-import browser from 'webextension-polyfill';
-import { faviconHelper } from '../util';
+import { faviconHelper, queryTabs } from '../util';
 import TabIcon from '../../img/tab.png';
 
 class ImageLoader {
     constructor() {
         this._base = this._loadImage(TabIcon);
-        this._tabs = this._queryTabs({ pinned: false });
         this._squareSize = 35;
     }
 
@@ -31,12 +29,8 @@ class ImageLoader {
         return c.toDataURL('image/png');
     }
 
-    async _queryTabs (options) {
-        return await browser.tabs.query(options);
-    }
-
     async getImages() {
-        const tabs = await this._tabs;
+        const tabs = await queryTabs();
         const promises = [];
         for (let tab of tabs) {
             promises.push(new Promise(async(resolve) => {

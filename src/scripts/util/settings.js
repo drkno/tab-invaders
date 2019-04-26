@@ -1,4 +1,5 @@
 import browser from 'webextension-polyfill';
+import keyboardKeys from './keys';
 
 class SettingsManager {
     async _updateSetting(name, value) {
@@ -37,8 +38,12 @@ class SettingsManager {
         return await this._handleGetSet('totalTabs', 0, newValue, reset);
     }
 
-    async keysPressed(newValue, reset) {
-        return await this._handleGetSet('keysPressed', 0, newValue, reset);
+    async bulletsFired(newValue, reset) {
+        return await this._handleGetSet('bulletsFired', 0, newValue, reset);
+    }
+
+    async playCount(newValue, reset) {
+        return await this._handleGetSet('playCount', 0, newValue, reset);
     }
 
     async closeWaitTime(newValue, reset) {
@@ -54,23 +59,29 @@ class SettingsManager {
     }
 
     async leftButton(newValue, reset) {
-        return await this._handleGetSet('leftButton', 'LEFT', newValue, reset);
+        return await this._handleGetSet('leftButton', keyboardKeys.LEFT, newValue, reset);
     }
 
     async rightButton(newValue, reset) {
-        return await this._handleGetSet('rightButton', 'RIGHT', newValue, reset);
+        return await this._handleGetSet('rightButton', keyboardKeys.RIGHT, newValue, reset);
+    }
+
+    async fireButton(newValue, reset) {
+        return await this._handleGetSet('fireButton', keyboardKeys.SPACEBAR, newValue, reset);
     }
 
     async reset() {
         return Promise.all([
             this.highScore(void(0), true),
             this.totalTabs(void(0), true),
-            this.keysPressed(void(0), true),
+            this.bulletsFired(void(0), true),
+            this.playCount(void(0), true),
             this.closeWaitTime(void(0), true),
             this.closeOnComplete(void(0), true),
             this.ignorePinnedTabs(void(0), true),
             this.leftButton(void(0), true),
-            this.rightButton(void(0), true)
+            this.rightButton(void(0), true),
+            this.fireButton(void(0), true)
         ]);
     }
 }
