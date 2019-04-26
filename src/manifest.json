@@ -32,7 +32,7 @@
 	"applications": {
 		"gecko": {
 			"id": "placeholder",
-			"strict_min_version": "48.0"
+			"strict_min_version": "60.0"
 		}
 	}
 }

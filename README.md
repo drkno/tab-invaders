@@ -12,6 +12,11 @@ This webextension is a game of space-invaders, modified to kill tabs instead of 
 ![](src/img/screenshots/start.png)  
 ![](src/img/screenshots/game.png)  
 
+### Building
+1. `yarn`
+2. `yarn build`
+3. The extension is then in the `build/extension` directory
+
 ### License and Credits
 [MIT License](./LICENSE)
 
