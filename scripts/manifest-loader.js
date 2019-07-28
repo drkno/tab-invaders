@@ -46,7 +46,6 @@ const loader = async(ctx, content) => {
     data.version = packageJson.version;
     data.description = packageJson.description;
     data.homepage_url = packageJson.homepage.split('#')[0];
-    data.applications.gecko.id = packageJson.name.replace('-', '') + '@knox.nz';
     let newContent = JSON.stringify(data);
     ctx.emitFile('manifest.json', newContent);
     return '{}';

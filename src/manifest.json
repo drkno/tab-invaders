@@ -31,7 +31,7 @@
 	},
 	"applications": {
 		"gecko": {
-			"id": "placeholder",
+			"id": "{902ec4bc-446a-4485-b979-a6a749ff94c8}",
 			"strict_min_version": "60.0"
 		}
 	}
